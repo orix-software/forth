@@ -11,6 +11,7 @@ OBJ= $(SRC:.md=.hlp)
 
 all: docs
 
+# $(ORIX_MANPATH)/%.hlp: %.md
 %.hlp: %.md
 	@mkdir -p "$(ORIX_MANPATH)"
 	@echo "Generate $@"

@@ -13,6 +13,9 @@ cart:
 docs:
 	@$(MAKE) -C docs
 
+test:
+	@echo "Do some tests"
+
 clean:
 	@$(MAKE) -C src $@
 	@$(MAKE) -C docs $@

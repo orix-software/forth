@@ -1,0 +1,65 @@
+image: gcc:4.8
+
+stages:
+        - build
+        - test
+        - deploy
+
+cache:
+        paths:
+                - build/
+
+job_build:
+        stage: build
+
+        only: 
+                - master
+
+        before_script:
+                # Prepare l'environnement "Travis"
+                - mkdir -p /home/travis
+                - ln -s /usr/local/bin /home/travis/bin
+                - env
+                # Travis before_install
+                - apt-get update
+                - apt-get install -qq git
+                - apt-get install -qq unzip
+                - git clone https://github.com/oric-software/buildTestAndRelease.git
+                - cd buildTestAndRelease/ && sh make.sh
+                - cd ..
+
+        script:
+                # Simule le fonctionnement de travis
+                - ./configure && make && make test
+
+        artifacts:
+                expire_in: 1 hour
+                paths:
+                    - build/
+
+
+job_test:
+        stage: test
+
+        only:
+                - master
+
+        cache:
+                policy: pull
+
+        script:
+                - ls
+
+job_deploy:
+        stage: deploy
+
+        only:
+                - master
+
+        cache:
+                policy: pull
+
+        script:
+                - ls -Rlh
+
+
