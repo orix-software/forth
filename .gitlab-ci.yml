@@ -27,7 +27,7 @@ job_build:
                 - pushd ..
                 - git clone https://github.com/assinie/md2hlp.git
                 - git clone https://github.com/cc65/cc65.git
-                - cd cc65 && make 2> /dev/null
+                - cd cc65 && make &> /dev/null
                 - cp bin/* /home/travis/bin/
                 - popd
 
