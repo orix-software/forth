@@ -1,11 +1,9 @@
-# Tele-Forth
-Cartouche Forth v1.2 pour Telestrat
+# Forth
+Forth cartridge for Orix with ch376 support
 
 ## Historique:
-- La version 1.1 a été écrite par Christophe Lavarenne.
-- La version 1.2 a été écrite par Thierry Bestel sur la base de la v1.1
-- Le fichier source a été généré avec da65 et mis en forme par Christian Lardière
+- Based on Tele-Forth v1.2 by Thierry Bestel
 
-## Arborescence
-- src : Sources pour xa
-- original : Image de la cartouche
+## Directories
+- docs: Documentation
+- src : Source files
