@@ -24,11 +24,12 @@ job_build:
                 - apt-get update
                 - apt-get install -qq git
                 - apt-get install -qq unzip
+                - pushd ..
                 - git clone https://github.com/assinie/md2hlp.git
                 - git clone https://github.com/cc65/cc65.git
-                - cd cc65 && make &> /dev/null
+                - cd cc65 && make 2> /dev/null
                 - cp bin/* /home/travis/bin/
-                - cd ..
+                - popd
 
         script:
                 # Simule le fonctionnement de travis
