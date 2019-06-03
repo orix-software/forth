@@ -134,6 +134,9 @@
 	;.define ROMend
 	;
 
+	; Ajout compatibilité Orix 'exec'
+	ORIX .set 1
+
 .endscope
 
 ; --------------------------------------------------------------
