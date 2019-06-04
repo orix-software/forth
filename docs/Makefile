@@ -2,7 +2,7 @@ BUILDPATH= ../build
 ORIX_MANPATH= $(BUILDPATH)/usr/share/man
 
 MD2HLP_PATH ?= ../md2hlp/src
-MD2HLP ?= $(MD2HLP_PATH)/md2hlp/src/md2hlp.py
+MD2HLP ?= $(MD2HLP_PATH)/md2hlp.py
 
 export MD2HLP_PATH
 
