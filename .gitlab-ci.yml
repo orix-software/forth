@@ -1,4 +1,4 @@
-image: gcc:4.8
+image: buildpack-deps:trusty
 
 stages:
         - build
@@ -6,8 +6,10 @@ stages:
         - deploy
 
 cache:
+        key: ${CI_COMMIT_REF_SLUG}
         paths:
-                - build/
+                - cc65/
+                - md2hlp/
 
 job_build:
         stage: build
@@ -17,18 +19,16 @@ job_build:
 
         before_script:
                 # Prepare l'environnement "Travis"
-                - mkdir -p /home/travis
-                - ln -s /usr/local/bin /home/travis/bin
-                - env
+                # - mkdir -p /home/travis
+                # - ln -s /usr/local/bin /home/travis/bin
+                # - env
                 # Travis before_install
-                - apt-get update
-                - apt-get install -qq git
-                - apt-get install -qq unzip
-                - pushd ..
-                - git clone https://github.com/assinie/md2hlp.git
-                - git clone https://github.com/cc65/cc65.git
-                - cd cc65 && make &> /dev/null
-                - cp bin/* /home/travis/bin/
+                # - apt-get update && apt-get install -qq git unzip
+                # - pushd ..
+                - "if [ ! -d md2hlp ]; then git clone https://github.com/assinie/md2hlp.git ; fi"
+                - "if [ ! -d cc65   ]; then git clone https://github.com/cc65/cc65.git ; fi"
+                - pushd cc65 && make &> /dev/null
+                - cp bin/* /usr/local/bin
                 - popd
 
         script:
