@@ -6,9 +6,9 @@ before_install:
     - sudo pip install mkdocs
     # - git clone https://github.com/oric-software/buildTestAndRelease.git
     # - cd buildTestAndRelease/ && sh make.sh
-    - pushd ..
+    #- pushd ..
     - git clone https://github.com/assinie/md2hlp.git
     - git clone https://github.com/cc65/cc65.git
-    - cd cc65 && make &> /dev/null
+    - pushd cc65 && make &> /dev/null
     - cp bin/* /home/travis/bin/
     - popd
