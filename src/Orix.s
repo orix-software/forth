@@ -56,9 +56,10 @@
 		;
 		; ----------------------------------------------------------------------------
 		        .word   parse_routine
-		        .word   0
-		        .word   0
-		        .byte   0
+		        .addr   $fffc
+		        .addr   parse_cmd
+				; $FFF7
+		        .byte   1 ; Number of commands in this rom
 
 	.endif
 
