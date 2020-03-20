@@ -40,7 +40,11 @@
 		parse_cmd:
 		        .asciiz "forth"
 
+		;commands_text:
+		;	.addr parse_cmd
 
+		commands_address:
+			.addr ORIGIN
 	.else
 		; verbose 3, "Ajout vecteurs Orix (exec)"
 
@@ -55,11 +59,11 @@
 		; ----------------------------------------------------------------------------
 		;
 		; ----------------------------------------------------------------------------
-		        .word   parse_routine
-		        .word   0
-		        .word   0
-		        .byte   0
-
+		        .addr   parse_routine
+		        .addr   commands_address
+		        .addr   parse_cmd
+		        ;.byte   (commands_address - commands_text)>>1
+			.byte 1
 	.endif
 
 .endif
