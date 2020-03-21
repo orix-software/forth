@@ -80,7 +80,7 @@ $(BUILDPATH)/$(OBJ):
 
 
 $(BUILDPATH)/$(ROM): $(BUILDPATH)/$(OBJ)
-	@echo "Create $(ROM)"
+	@echo "Create $(ROM) - $(PROJECT_VERSION_MAJ).$(PROJECT_VERSION_MIN)"
 	$(LD) $(LDFLAGS) -o $@ $^
 ifeq ($(DEBUG),yes)
 	sed -re 's/al 00(.{4}) \.(.+)$$/\1 \2/' $(BUILDPATH)/$(PROJECT).ca.sym | sort > $(BUILDPATH)/$(PROJECT).sym
