@@ -9,8 +9,14 @@
 ; --------------------------------------------------------------
 .scope TeleForth_V2
 
-	VERSION_MAJ = 2
-	VERSION_MIN = 0
+	.ifnblank(GIT_BRANCH)
+		GIT_REPOSITORY .set 1
+		VERSION_MAJ = GIT_VERSION_MAJ
+		VERSION_MIN = GIT_VERSION_MIN
+	.else
+		VERSION_MAJ = 2
+		VERSION_MIN = 0
+	.endif
 
 	; Dictionnaire en minuscules
 	; Pose un pb pour la conversion des nombres de base > 10
@@ -144,8 +150,14 @@
 ; --------------------------------------------------------------
 .scope TeleForth_V2_Minimal
 
-	VERSION_MAJ = 2
-	VERSION_MIN = 0
+	.ifnblank(GIT_BRANCH)
+		GIT_SOURCE .set 1
+		VERSION_MAJ = GIT_VERSION_MAJ
+		VERSION_MIN = GIT_VERSION_MIN
+	.else
+		VERSION_MAJ = 2
+		VERSION_MIN = 0
+	.endif
 
 	; Dictionnaire en minuscules
 	DictCase .Set 1

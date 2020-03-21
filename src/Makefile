@@ -14,6 +14,29 @@ VERBOSE ?= 0
 #
 
 #
+# Récupère le nom de la branche pour en extraire le n° de  version
+#
+GIT_BRANCH := $(shell git branch 2>/dev/null | grep '*' | cut -d' ' -f2)
+
+#
+# Le nom de la branche est <annee>.<trimestre>
+#
+ifneq ($(GIT_BRANCH),master)
+	GIT_VERSION_MAJ := $(shell echo ${GIT_BRANCH} | cut -d. -f1)
+	GIT_VERSION_MIN := $(shell echo ${GIT_BRANCH} | cut -d. -f2)
+else
+	@echo "ATTENTION: compilation depuis la branche master"
+	GIT_VERSION_MAJ := 99
+	GIT_VERSION_MIN := 9
+endif
+
+ifeq ($(GIT_VERSION_MAJ),$(GIT_VERSION_MIN))
+	@echo "ATTENTION: nom de branche GIT incorrect ou pas dépôt GIT"
+	GIT_VERSION_MAJ := 66
+	GIT_VERSION_MIN := 6
+endif
+
+#
 # Définition des outils
 #
 
@@ -68,6 +91,9 @@ configure:
 	@date +'.define __DATE__ "%F %R"'               > $(BUILDPATH)/build.inc
 	@echo  ".define With TeleForth_V${VERSION}"    >> $(BUILDPATH)/build.inc
 	@echo  ".define AUTOSTART_FILE \"${STARTUP}\"" >> $(BUILDPATH)/build.inc
+	@echo  ".define GIT_BRANCH \"${GIT_BRANCH}\""  >> $(BUILDPATH)/build.inc
+	@echo  ".define GIT_VERSION_MAJ ${GIT_VERSION_MAJ}"  >> $(BUILDPATH)/build.inc
+	@echo  ".define GIT_VERSION_MIN ${GIT_VERSION_MIN}"  >> $(BUILDPATH)/build.inc
 
 -include $(BUILDPATH)/.depend
 
