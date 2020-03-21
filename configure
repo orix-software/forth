@@ -1,1 +1,3 @@
+echo "Test"
+echo "2020.1" | cut -d. -f1
 make configure
