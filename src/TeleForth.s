@@ -9,9 +9,9 @@
 
 .include "TeleForth.inc"
 
-.include "Configs.inc"
-
 .include "build.inc"
+
+.include "Configs.inc"
 
 .include "Needs.inc"
 
@@ -2959,7 +2959,7 @@ MSG:
 	        pstring "TELE-FORTH V1.2 - Thierry BESTEL"
 	.else
 	        .byte $0F
-	        pstring .sprintf("TELE-FORTH V%d.%d - Christian Lardiere",With::VERSION_MAJ, With::VERSION_MIN)
+	        pstring .sprintf("Orix-FORTH V%d.%d - Christian Lardiere",With::VERSION_MAJ, With::VERSION_MIN)
 	.endif
 
 
@@ -3035,7 +3035,7 @@ MSG:
 		pstring "Repertoire existant"
 
 	        .byte $FE
-		pstring .sprintf("TELE-FORTH V%d.%d%c%cgenere avec xa v2.3.8", With::VERSION_MAJ, With::VERSION_MIN,$0D,$0A)
+		pstring .sprintf("Orix-FORTH V%d.%d%c%cgenere avec ca65", With::VERSION_MAJ, With::VERSION_MIN,$0D,$0A)
 
 	        .byte $FF
 		pstring .sprintf("Base sur TELE-FORTH V1.2%c%cde Thierry Bestel",$0D,$0A)
@@ -3948,28 +3948,35 @@ EMIT_pfa:
 	        .word   TWOSTORE
 	        .word   TERMINAL
 	        .word   CR
-	        .word   PDOTQ
 
-	        .byte   $0C
-	        .byte   "TELE-FORTH V"
+		.ifdef With::GIT_REPOSITORY
+		        .word   PDOTQ
+		        .byte   .strlen(.sprintf("Orix-FORTH v%s", GIT_BRANCH))
+		        .byte   .sprintf("Orix-FORTH v%s", GIT_BRANCH)
+		.else
+		        .word   PDOTQ
+		        .byte   $0C
+		        .byte   "TELE-FORTH V"
 
-	        .word   LIT
-	        .word   With::VERSION_MAJ
-	        .word   LIT
-	        .word   $30
-	        .word   PLUS
-	        .word   EMIT
-	        .word   PDOTQ
+		        .word   LIT
+		        .word   With::VERSION_MAJ
+		        .word   LIT
+		        .word   $30
+		        .word   PLUS
+		        .word   EMIT
+		        .word   PDOTQ
 
-	        .byte   $01
-	        .byte   "."
+		        .byte   $01
+		        .byte   "."
 
-	        .word   LIT
-	        .word   With::VERSION_MIN
-	        .word   LIT
-	        .word   $30
-	        .word   PLUS
-	        .word   EMIT
+		        .word   LIT
+		        .word   With::VERSION_MIN
+		        .word   LIT
+		        .word   $30
+		        .word   PLUS
+		        .word   EMIT
+		.endif
+
 	        .word   SPACE
 	        .word   HIMEM
 	        .word   HERE
@@ -4672,7 +4679,8 @@ teleforth_signature:
         .byte   "(c) 1989 Thierry BESTEL"
         .byte   $0D,$0A,$00
 .else
-        .byte   .sprintf("TELE-FORTH V%d.%d (ch376) - %s", With::VERSION_MAJ, With::VERSION_MIN, __DATE__)
+        ; .byte   .sprintf("Orix-FORTH v%d.%d - %s", With::VERSION_MAJ, With::VERSION_MIN, __DATE__)
+        .byte   .sprintf("Orix-FORTH v%d.%d", With::VERSION_MAJ, With::VERSION_MIN)
         .byte $00
 .endif
 
@@ -5361,23 +5369,26 @@ verbose 1, ""
 ; ----------------------------------------------------------------------------
 .ifdef With::ORIX
 	.include "Orix.s"
-.endif
 
-; ----------------------------------------------------------------------------
-.if * > $fff8
-	.error .sprintf("Erreur fichier trop long %d", _err_)
-.endif
-.res $fff8-*, $00
+.else
+	; ----------------------------------------------------------------------------
+	; Vecteurs pour la version d'origine
+	; ----------------------------------------------------------------------------
+	.if * > $fff8
+		.error .sprintf("Erreur fichier trop long %d", _err_)
+	.endif
+	.res $fff8-*, $00
 
 
-; ----------------------------------------------------------------------------
-; Vecteurs 6502 & Telemon
-; ----------------------------------------------------------------------------
+	; ----------------------------------------------------------------------------
+	; Vecteurs 6502 & Telemon
+	; ----------------------------------------------------------------------------
         .word   teleforth_signature
-; ----------------------------------------------------------------------------
-;        .byte   $12,$EF
+	; ----------------------------------------------------------------------------
+	;        .byte   $12,$EF
 	.byte   (With::VERSION_MAJ << 4)+(With::VERSION_MIN)
 	.byte   $EF
-; ----------------------------------------------------------------------------
+	; ----------------------------------------------------------------------------
         .word   ORIGIN
         .word   virq
+.endif

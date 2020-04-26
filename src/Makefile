@@ -14,6 +14,31 @@ VERBOSE ?= 0
 #
 
 #
+# Récupère le nom de la branche pour en extraire le n° de  version
+#
+ifeq ($(TRAVIS_BRANCH),)
+	GIT_BRANCH := $(shell git branch 2>/dev/null | grep '*' | cut -d' ' -f2)
+else
+	GIT_BRANCH := $(TRAVIS_BRANCH)
+endif
+
+ifeq ($(GIT_BRANCH),master)
+	GIT_BRANCH := $(shell cat VERSION 2>/dev/null)
+endif
+
+#
+# Le nom de la branche est <annee>.<trimestre>
+#
+PROJECT_VERSION_MAJ := $(shell echo ${GIT_BRANCH} | cut -d. -f1)
+PROJECT_VERSION_MIN := $(shell echo ${GIT_BRANCH} | cut -d. -f2)
+
+
+ifeq ($(PROJECT_VERSION_MAJ),$(PROJECT_VERSION_MIN))
+	PROJECT_VERSION_MAJ := 66
+	PROJECT_VERSION_MIN := 6
+endif
+
+#
 # Définition des outils
 #
 
@@ -55,7 +80,7 @@ $(BUILDPATH)/$(OBJ):
 
 
 $(BUILDPATH)/$(ROM): $(BUILDPATH)/$(OBJ)
-	@echo "Create $(ROM)"
+	@echo "Create $(ROM) - $(PROJECT_VERSION_MAJ).$(PROJECT_VERSION_MIN)"
 	$(LD) $(LDFLAGS) -o $@ $^
 ifeq ($(DEBUG),yes)
 	sed -re 's/al 00(.{4}) \.(.+)$$/\1 \2/' $(BUILDPATH)/$(PROJECT).ca.sym | sort > $(BUILDPATH)/$(PROJECT).sym
@@ -68,6 +93,9 @@ configure:
 	@date +'.define __DATE__ "%F %R"'               > $(BUILDPATH)/build.inc
 	@echo  ".define With TeleForth_V${VERSION}"    >> $(BUILDPATH)/build.inc
 	@echo  ".define AUTOSTART_FILE \"${STARTUP}\"" >> $(BUILDPATH)/build.inc
+	@echo  ".define GIT_BRANCH \"${GIT_BRANCH}\""  >> $(BUILDPATH)/build.inc
+	@echo  ".define PROJECT_VERSION_MAJ ${PROJECT_VERSION_MAJ}"  >> $(BUILDPATH)/build.inc
+	@echo  ".define PROJECT_VERSION_MIN ${PROJECT_VERSION_MIN}"  >> $(BUILDPATH)/build.inc
 
 -include $(BUILDPATH)/.depend
 

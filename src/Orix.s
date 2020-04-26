@@ -14,34 +14,13 @@
 		; ----------------------------------------------------------------------------
 		; Compatibilité Orix: exec
 		; ----------------------------------------------------------------------------
-		BUFEDT = $0590
-
-		.proc parse_routine
-		        ldy #$ff
-
-		@loop:
-		        iny
-		        lda BUFEDT,y
-		        beq @maybe
-		        cmp parse_cmd,y
-		        beq @loop
-		        cmp #' '
-		        bne @not_found
-
-		@maybe:
-		        lda parse_cmd,y
-		        bne @not_found
-		        jmp ($fffc)
-
-		@not_found:
-		        rts
-		.endproc
-
-		parse_cmd:
+		commands_list:
 		        .asciiz "forth"
 
-		;commands_text:
-		;	.addr parse_cmd
+		commands_address:
+			.addr ORIGIN
+
+		commands_address_end:
 
 		commands_address:
 			.addr ORIGIN
@@ -51,19 +30,35 @@
 		; ----------------------------------------------------------------------------
 		;
 		; ----------------------------------------------------------------------------
-		.if * > $fff1
+		.if * > $fff3
 			.error .sprintf("Erreur fichier trop long %d", _err_)
 		.endif
-		.res $fff1-*, $00
+		.res $fff3-*, $00
 
 		; ----------------------------------------------------------------------------
-		;
+		; Vecteurs Orix
 		; ----------------------------------------------------------------------------
-		        .addr   parse_routine
 		        .addr   commands_address
-		        .addr   parse_cmd
-		        ;.byte   (commands_address - commands_text)>>1
-			.byte 1
+		        .addr   commands_list
+		        .byte   (commands_address_end - commands_address)>>1
+
+		; ----------------------------------------------------------------------------
+		; Vecteurs 6502 & Telemon
+		; ----------------------------------------------------------------------------
+	        .word   teleforth_signature
+
+		; ----------------------------------------------------------------------------
+		; NMI
+		; ----------------------------------------------------------------------------
+		.addr   ORIGIN
+		; ----------------------------------------------------------------------------
+		; RESET
+		; ----------------------------------------------------------------------------
+	        .word   ORIGIN
+		; ----------------------------------------------------------------------------
+		; IRQ
+		; ----------------------------------------------------------------------------
+	        .word   virq
 	.endif
 
 .endif
