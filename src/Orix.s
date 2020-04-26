@@ -22,8 +22,6 @@
 
 		commands_address_end:
 
-		commands_address:
-			.addr ORIGIN
 	.else
 		; verbose 3, "Ajout vecteurs Orix (exec)"
 
