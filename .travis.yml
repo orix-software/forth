@@ -1,14 +1,17 @@
 language: c
 before_install:
-    # - sudo apt-get update -qq
-    # - sudo apt-get install -qq git
-    # - sudo pip install --upgrade pip
-    # - sudo pip install mkdocs
-    # - git clone https://github.com/oric-software/buildTestAndRelease.git
-    # - cd buildTestAndRelease/ && sh make.sh
-    #- pushd ..
+    - sudo apt-get update -qq
+    - sudo apt-get install -qq curl
     - git clone https://github.com/assinie/md2hlp.git
     - git clone https://github.com/cc65/cc65.git
     - pushd cc65 && make &> /dev/null
     - cp bin/* /home/travis/bin/
+    - VERSION=`cat src/VERSION`
+    - mkdir orix/usr/share/forth/$VERSION -p && cp build/cart/TeleForth.rom orix/usr/share/forth/$VERSION/forth.rom
+    - mkdir orix/usr/share/man/ -p && cp build/usr/share/man/forth.hlp orix/usr/share/man/
+    - mkdir orix/etc/orixcfg/$VERSION/ && echo "Forth v$VERSION;/usr/share/forth/$VERSION/forth.rom" > orix/etc/orixcfg/$VERSION/forth.cnf
+    - cd orix && tar -c * > ../forth.tar &&	cd ..
+    - gzip forth.tar
+    - mv forth.tar.gz forth.tgz
+    - curl -X POST -d '@forth.tgz' https://cdn.oric.org/publish.php?hash=$hash&path=/home/oricoujr/www/ftp/orix/dists/$VERSION/tgz/6502/forth.tgz
     - popd
