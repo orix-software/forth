@@ -9,9 +9,10 @@ before_install:
     - VERSION=`cat src/VERSION`
     - mkdir orix/usr/share/forth/$VERSION -p && cp build/cart/TeleForth.rom orix/usr/share/forth/$VERSION/forth.rom
     - mkdir orix/usr/share/man/ -p && cp build/usr/share/man/forth.hlp orix/usr/share/man/
+    - mkdir orix/usr/src/forth -p &&  cp src/* orix/usr/src/forth -adpR
     - mkdir orix/etc/orixcfg/$VERSION/ && echo "Forth v$VERSION;/usr/share/forth/$VERSION/forth.rom" > orix/etc/orixcfg/$VERSION/forth.cnf
     - cd orix && tar -c * > ../forth.tar &&	cd ..
     - gzip forth.tar
     - mv forth.tar.gz forth.tgz
-    - curl -X POST -d '@forth.tgz' https://cdn.oric.org/publish.php?hash=$hash&path=/home/oricoujr/www/ftp/orix/dists/$VERSION/tgz/6502/forth.tgz
+    - curl -X POST --data-binary '@forth.tgz' https://cdn.oric.org/publish.php?hash=$hash&path=/home/oricoujr/www/ftp/orix/dists/$VERSION/tgz/6502/forth.tgz
     - popd
