@@ -23,7 +23,7 @@ else
 endif
 
 ifeq ($(GIT_BRANCH),master)
-	GIT_BRANCH := $(shell cat VERSION 2>/dev/null)
+	GIT_BRANCH := $(shell cat ../VERSION 2>/dev/null)
 endif
 
 #
