@@ -23,14 +23,16 @@ If you were in /, forth will load and save file in this folder.
 In others cases, you can create a forth folder in home and goes into it
 in forth for example :
 
-* mkdir home
-* #cd home
-* #mkdir forth
-* forth
+```bash
+/#mkdir home
+/#cd home
+/home#mkdir forth
+/home#forth
+```
 
 if you type « cd forth» in forth environnement, all files actions will
 be perform in « /*home/*forth »
 
 ## SOURCE
 
-https://github.com/assinie/Tele-Forth
+[https://github.com/orix-software/forth/]
